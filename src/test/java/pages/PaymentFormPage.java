@@ -1,21 +1,25 @@
 package pages;
 
+import com.marketpay.utils.Constants;
 import com.marketpay.utils.LoggerUtil;
+import services.PaymentService;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
-import services.PaymentService;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.time.Duration;
 
 public class PaymentFormPage extends BasePage {
     private static final Logger logger = LoggerUtil.getLogger(PaymentFormPage.class);
+    private WebDriverWait iframeWait;
 
     @FindBy(xpath = "//n-dropdown[@name='testData' and @placeholder='Select test data']//button[@role='listbox']")
     private WebElement testDataDropdown;
@@ -61,6 +65,7 @@ public class PaymentFormPage extends BasePage {
 
     public PaymentFormPage(WebDriver driver) {
         super(driver);
+        this.iframeWait = new WebDriverWait(driver, Duration.ofSeconds(Constants.IFRAME_TIMEOUT));
     }
 
     public void navigateToCheckout() {
@@ -105,19 +110,19 @@ public class PaymentFormPage extends BasePage {
     public boolean isPaymentFormVisible() {
         try {
             logger.info("Checking if payment form is visible");
-            WebElement iframe = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("ipgframe")));
+            WebElement iframe = iframeWait.until(ExpectedConditions.presenceOfElementLocated(By.id("ipgframe")));
             boolean isVisible = iframe.isDisplayed();
             logger.info("Payment form visible: {}", isVisible);
             return isVisible;
         } catch (Exception e) {
-            logger.error("Payment form is not visible: {}", e.getMessage());
+            logger.error("Payment form is not visible after {} seconds: {}", Constants.IFRAME_TIMEOUT, e.getMessage());
             return false;
         }
     }
 
     public void switchToPaymentFrame() {
         logger.debug("Switching to payment iframe");
-        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(paymentIframe));
+        iframeWait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(paymentIframe));
     }
 
     public void switchToDefaultFrame() {

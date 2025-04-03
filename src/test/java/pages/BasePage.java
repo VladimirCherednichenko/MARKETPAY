@@ -18,11 +18,15 @@ import java.time.Duration;
 public class BasePage {
     protected WebDriver driver;
     protected WebDriverWait wait;
+    protected WebDriverWait shortWait;
+    protected WebDriverWait extendedWait;
     private static final Logger logger = LoggerUtil.getLogger(BasePage.class);
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(Constants.DEFAULT_TIMEOUT_SECONDS));
+        this.shortWait = new WebDriverWait(driver, Duration.ofSeconds(Constants.SHORT_TIMEOUT));
+        this.extendedWait = new WebDriverWait(driver, Duration.ofSeconds(Constants.EXTENDED_TIMEOUT));
         PageFactory.initElements(driver, this);
         logger.debug("Initialized page: {}", this.getClass().getSimpleName());
     }
@@ -32,7 +36,7 @@ public class BasePage {
             logger.debug("Waiting for element to be visible: {}", element);
             wait.until(ExpectedConditions.visibilityOf(element));
         } catch (TimeoutException e) {
-            logger.error("Element not visible after {} seconds: {}", Constants.DEFAULT_TIMEOUT_SECONDS, element);
+            logger.error("Element not visible after {} seconds: {}", Constants.ELEMENT_VISIBILITY_TIMEOUT, element);
         }
     }
 
@@ -41,7 +45,7 @@ public class BasePage {
             logger.debug("Waiting for element to be clickable: {}", element);
             wait.until(ExpectedConditions.elementToBeClickable(element));
         } catch (TimeoutException e) {
-            logger.error("Element not clickable after {} seconds: {}", Constants.DEFAULT_TIMEOUT_SECONDS, element);
+            logger.error("Element not clickable after {} seconds: {}", Constants.ELEMENT_CLICKABLE_TIMEOUT, element);
         }
     }
 
@@ -51,7 +55,7 @@ public class BasePage {
             wait.until((ExpectedCondition<Boolean>) wd ->
                     ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
         } catch (TimeoutException e) {
-            logger.error("Page not loaded completely after {} seconds", Constants.DEFAULT_TIMEOUT_SECONDS);
+            logger.error("Page not loaded completely after {} seconds", Constants.PAGE_LOAD_TIMEOUT);
         }
     }
 
