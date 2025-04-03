@@ -1,8 +1,8 @@
 package pages;
 
+import com.marketpay.utils.ConfigManager;
 import com.marketpay.utils.Constants;
 import com.marketpay.utils.LoggerUtil;
-import services.PaymentService;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
+import services.PaymentService;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
@@ -70,8 +71,7 @@ public class PaymentFormPage extends BasePage {
 
     public void navigateToCheckout() {
         logger.info("Navigating to checkout page");
-        driver.get("https://demoshop.preprod.mpg.market-pay.com/shop/#/checkout");
-        waitForPageToLoad();
+        navigateTo(Constants.CHECKOUT_PATH);
         logger.info("Checkout page loaded successfully");
     }
 
@@ -241,7 +241,7 @@ public class PaymentFormPage extends BasePage {
             return isMatch;
         } catch (Exception e) {
             logger.error("Failed to validate session status: {}", e.getMessage());
-            return false;
+            throw e;
         }
     }
 
@@ -254,7 +254,7 @@ public class PaymentFormPage extends BasePage {
                 return errorMsgElement.getText();
             } catch (Exception e) {
                 logger.debug("Error message element not found or not visible: {}", e.getMessage());
-                return "";
+                throw e;
             }
         }
         return "";
@@ -309,8 +309,8 @@ public class PaymentFormPage extends BasePage {
             boolean hasRedBorder = borderColor != null && (borderColor.contains("rgb(231, 29, 50)"));
             return hasErrorClass && hasRedBorder;
         } catch (Exception e) {
-            System.out.println("Error checking for red border: " + e.getMessage());
-            return false;
+            logger.error("Error checking for red border: {}", e.getMessage());
+            throw e;
         }
     }
 

@@ -1,5 +1,6 @@
 package pages;
 
+import com.marketpay.utils.ConfigManager;
 import com.marketpay.utils.Constants;
 import com.marketpay.utils.LoggerUtil;
 import org.apache.logging.log4j.Logger;
@@ -37,6 +38,7 @@ public class BasePage {
             wait.until(ExpectedConditions.visibilityOf(element));
         } catch (TimeoutException e) {
             logger.error("Element not visible after {} seconds: {}", Constants.ELEMENT_VISIBILITY_TIMEOUT, element);
+            throw e;
         }
     }
 
@@ -46,6 +48,7 @@ public class BasePage {
             wait.until(ExpectedConditions.elementToBeClickable(element));
         } catch (TimeoutException e) {
             logger.error("Element not clickable after {} seconds: {}", Constants.ELEMENT_CLICKABLE_TIMEOUT, element);
+            throw e;
         }
     }
 
@@ -56,6 +59,7 @@ public class BasePage {
                     ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
         } catch (TimeoutException e) {
             logger.error("Page not loaded completely after {} seconds", Constants.PAGE_LOAD_TIMEOUT);
+            throw e;
         }
     }
 
@@ -78,9 +82,9 @@ public class BasePage {
             element.sendKeys(text);
         } catch (Exception e) {
             logger.error("Failed to type text: {}", e.getMessage());
+            throw e;
         }
     }
-
 
     protected void waitForElementDisplayed(WebElement element) {
         logger.debug("Waiting for element to be displayed: {}", element);
@@ -98,6 +102,15 @@ public class BasePage {
         Actions actions = new Actions(driver);
         actions.moveToElement(element).perform();
     }
-
-
+    
+    protected void navigateTo(String path) {
+        String url = ConfigManager.getBaseUrl().trim();
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        String fullUrl = url + "/" + path;
+        logger.info("Navigating to: {}", fullUrl);
+        driver.get(fullUrl);
+        waitForPageToLoad();
+    }
 } 

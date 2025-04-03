@@ -32,7 +32,7 @@ Feature: Market Pay Payment Processing and Validation
     Examples:
       | card_number        | expected_error                   |
       | invalid123456      | Please enter a valid card number |
-      | 4111               | Please enter a valid card number |
+      | 4111               | Please enter a valicard number |
       | 4111-1111-1111-xyz | Please enter a valid card number |
 
 
