@@ -126,7 +126,7 @@ public class PaymentFormPage extends BasePage {
     }
 
     public void enterCardNumber(String cardNumber) {
-        logger.info("Entering card number: {}", cardNumber.substring(0, 4) + "********" + cardNumber.substring(cardNumber.length() - 4));
+        logger.info("Entering card number: {}", cardNumber);
         switchToPaymentFrame();
         waitForElementToBeClickable(cardNumberField);
         type(cardNumberField, cardNumber);
