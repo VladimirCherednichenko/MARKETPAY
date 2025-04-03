@@ -142,7 +142,7 @@ public class PaymentFormPage extends BasePage {
     }
 
     public void enterCVV(String cvv) {
-        logger.info("Entering CVV: ***");
+        logger.info("Entering CVV: {}", cvv);
         switchToPaymentFrame();
         type(cvvField, cvv);
         switchToDefaultFrame();
