@@ -11,12 +11,12 @@ This project provides robust end-to-end test automation for the Market Pay payme
 
 ## Technology Stack
 
-- **Java 17**: Core programming language
-- **Selenium 4.16.1**: WebDriver framework for browser automation
+- **Java 17**: programming language
+- **Selenium 4.16.1**: WebDriver framework
 - **Cucumber 7.14.0**: BDD test framework
-- **Allure 2.24.0**: Modern test reporting
+- **Allure 2.24.0**: reporting
 - **WebDriverManager 5.5.3**: Automated driver management
-- **Log4j 2.22.1**: Advanced logging capabilities
+- **Log4j 2.22.1**:  logging 
 
 ## Project Structure
 
@@ -65,7 +65,7 @@ Implements a factory pattern for browser instantiation:
 ### Configuration Management
 - `ConfigManager`: Handles property loading and access
 - `Constants`: Stores application-wide constant values
-- `WebDriverManager`: Manages driver lifecycle and thread-safety
+- `WebDriverManager`: Manages driver
 
 ## Setup
 
